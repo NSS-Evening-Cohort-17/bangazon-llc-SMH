@@ -19,6 +19,9 @@ class PaymentTypeView(ViewSet):
     def list(self, request):
         """Get a list of payment types for the current user"""
         payment_types = PaymentType.objects.all()
+        customer=request.auth.user
+        if customer is not None:
+            payment_types = payment_types.filter(customer=customer)
         serializer = PaymentTypeSerializer(payment_types, many=True)
         return Response(serializer.data)
 
